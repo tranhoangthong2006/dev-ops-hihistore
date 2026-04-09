@@ -27,3 +27,7 @@ services:
           name: ai-ecommerce-backend
           type: web
           property: host
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
