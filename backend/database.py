@@ -18,8 +18,8 @@ async def init_db():
                 {"name": "Áo Khoác Chrome Hearts", "price": 420000, "category": "Thời trang", "description": "Áo khoác bomber với các họa tiết phản quang kì ảo ban đêm.", "image": "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=400"},
                 {"name": "Vòng Cổ Pha Lê Bóng Đêm", "price": 250000, "category": "Trang sức", "description": "Vòng cổ tinh xảo được chế tác từ đá obsidian, tăng cường sự bí ẩn.", "image": "/assets/vong_co.jpg"},
                 {"name": "Kính Mát Dior", "price": 300000, "category": "Phụ kiện", "description": "Kính râm gắn đèn LED RGB độc rập, biến mọi ánh nhìn thành tâm điểm.", "image": "https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=400"},
-                {"name": "Áo Thun Basic Fit", "price": 150000, "category": "Trang phục", "description": "Găng tay giữ ấm dệt bằng sợi thông minh, giúp bạn bấm điện thoại dễ dàng ngoài trời.", "image": "/assets/ao_thun_thien_than.jpg"},
-                {"name": "Dép Sandals Cloud Rose", "price": 250000, "category": "Thời trang", "description": "Áo sơ mi trắng thanh lịch, phù hợp đi học và đi làm.", "image": "/assets/dep_banh_mi.jpg"},
+                {"name": "Áo Thun Basic Fit", "price": 150000, "category": "Trang phục", "description": "Áo thun cơ bản dáng rộng, thoải mái, dễ phối đồ với mọi phong cách.", "image": "https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=400"},
+                {"name": "Dép Sandals Cloud Rose", "price": 250000, "category": "Thời trang", "description": "Dép độn đế nhẹ như mây, màu hồng trẻ trung cá tính.", "image": "https://images.unsplash.com/photo-1560343090-f0409e92791a?w=400"},
                 {"name": "Quần Jean Nam Slimfit", "price": 350000, "category": "Thời trang", "description": "Quần Jean dáng ôm vừa vặn, màu xanh nhạt trẻ trung.", "image": "https://images.unsplash.com/photo-1542272604-787c3835535d?w=400"},
                 {"name": "Balo Laptop Đa Năng", "price": 450000, "category": "Phụ kiện", "description": "Balo chống nước, tích hợp cổng sạc USB.", "image": "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400"},
                 {"name": "Mũ Lưỡi Trai Unisex", "price": 120000, "category": "Phụ kiện", "description": "Mũ lưỡi trai màu đen basic, dễ dàng phối đồ.", "image": "https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=400"},
@@ -32,5 +32,16 @@ async def init_db():
             ]
             await products_collection.insert_many(sample_products)
             print("Inserted seed products into database.")
+        else:
+            # Sửa lỗi ảnh cho database đã lỡ seed data cũ
+            await products_collection.update_one(
+                {"name": "Áo Thun Basic Fit"},
+                {"$set": {"image": "https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=400", "description": "Áo thun cơ bản dáng rộng, thoải mái, dễ phối đồ với mọi phong cách."}}
+            )
+            await products_collection.update_one(
+                {"name": "Dép Sandals Cloud Rose"},
+                {"$set": {"image": "https://images.unsplash.com/photo-1560343090-f0409e92791a?w=400", "description": "Dép độn đế nhẹ như mây, màu hồng trẻ trung cá tính."}}
+            )
+            print("Updated existing products with correct images.")
     except Exception as e:
         print(f"Error accessing MongoDB: {e}")
