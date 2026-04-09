@@ -1,0 +1,29 @@
+services:
+  # --- BACKEND: FastAPI chạy trên Docker ---
+  - type: web
+    name: ai-ecommerce-backend
+    env: docker
+    dockerfilePath: backend/Dockerfile
+    dockerContext: backend
+    plan: free # Sử dụng gói miễn phí
+    region: singapore # Chọn region gần Việt Nam để tốc độ nhanh nhất
+    envVars:
+      - key: MONGO_URL
+        sync: false # Render sẽ hỏi bạn nhập giá trị này khi cài đặt
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: PORT
+        value: 8000
+
+  # --- FRONTEND: React (Vite) ---
+  - type: web
+    name: ai-ecommerce-frontend
+    env: static
+    buildCommand: "cd frontend && npm install && npm run build"
+    staticPublishPath: "frontend/dist"
+    envVars:
+      - key: VITE_BACKEND_HOST
+        fromService:
+          name: ai-ecommerce-backend
+          type: web
+          property: host

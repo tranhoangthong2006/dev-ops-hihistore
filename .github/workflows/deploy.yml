@@ -1,0 +1,41 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+
+    - name: Build Backend Image
+      run: |
+        echo "Building backend image..."
+        cd backend && docker build -t my-app-backend:latest .
+        
+    - name: Build Frontend Image
+      run: |
+        echo "Building frontend image..."
+        cd frontend && docker build -t my-app-frontend:latest .
+
+  deploy:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+    - name: Deploy via SSH (Mock)
+      run: |
+        echo "Đồ án thường dùng lệnh docker-compose qua SSH để triển khai"
+        echo "ssh user@server 'cd /app && git pull origin main && docker-compose up -d --build'"
