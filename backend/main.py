@@ -128,7 +128,7 @@ async def forgot_password(request: ChangePasswordRequest):
         {"_id": user["_id"]},
         {"$set": {"password": request.new_password}}
     )
-    return {"message": "Mật khẩu mới đã được khai mở thành công."}
+    return {"message": "Mật khẩu mới đã được cập nhật."}
 
 @app.post("/api/leads")
 async def create_lead(request: LeadRequest):
